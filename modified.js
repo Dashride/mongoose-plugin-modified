@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
+const mongoose = require('mongoose');
 
 /**
  * @module mongoose-plugin-modified
@@ -37,6 +38,10 @@ function lastModifiedPlugin(schema, options) {
       ref: undefined,
       options: {
         set: function markModifiedBy(v) {
+          if (this instanceof mongoose.Query) {
+            return v;
+          }
+
           this.markModified(options.by.path);
           return v;
         }
